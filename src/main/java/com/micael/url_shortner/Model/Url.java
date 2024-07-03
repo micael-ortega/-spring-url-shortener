@@ -42,7 +42,7 @@ public class Url {
     }
 
     public String getShortUrl(){
-        return "http://🌜/" + this.code;
+        return "http://localhost/" + this.code;
     }
 
     public static class Builder {

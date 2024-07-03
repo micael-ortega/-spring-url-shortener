@@ -5,9 +5,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.micael.url_shortner.Model.Url;
 import com.micael.url_shortner.Service.UrlService;
@@ -34,15 +36,17 @@ public class UrlController {
         }
     }
 
-    @GetMapping("/code")
-    public ResponseEntity<String> getUrl(@RequestBody CodeRequest codeRequest) {
-        String code = codeRequest.getCode();
+    @GetMapping("/{code}")
+    public RedirectView getUrl(@PathVariable("code") String code) {
         Optional<Url> result = urlService.getUrl(code);
 
-        if (result.isPresent()) {
-            return ResponseEntity.ok(result.get().getUrl());
-        } else {
-            return ResponseEntity.status(404).body("Not found");
-        }
+        System.out.println(result.get().getUrl());
+
+        RedirectView redirectView = new RedirectView();
+        redirectView.setUrl(result.get().getUrl());
+        
+
+        return redirectView;
+
     }
 }
